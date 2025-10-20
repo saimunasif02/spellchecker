@@ -3,82 +3,95 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Spelling Sprint — 60s Spelling Practice</title>
+<title>Spelling Sprint & Practice — 60s + Practice Mode</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0f1724;--card:#0b1220;--accent:#7dd3fc;--muted:#94a3b8}
+:root{--bg:#0f1724;--card:#07172a;--muted:#9fb0c8;--accent:#60a5fa;--success:#34d399;--danger:#fb7185}
 *{box-sizing:border-box}
-body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0; background:linear-gradient(180deg,#071024 0%, #081428 100%); color:#e6eef8; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px}
-.container{width:100%;max-width:900px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:20px;box-shadow:0 8px 30px rgba(2,6,23,0.7)}
-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial; margin:0; background:linear-gradient(180deg,#05101b 0%, #071428 100%); color:#e6eef8; min-height:100vh; display:flex;align-items:center;justify-content:center;padding:24px}
+.wrap{width:100%;max-width:980px}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:14px; padding:18px; box-shadow:0 10px 30px rgba(2,6,23,0.7)}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
 h1{font-size:20px;margin:0}
-.controls{display:flex;gap:8px;align-items:center}
-select,input[type=number]{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:6px;border-radius:8px}
-button{background:var(--accent);border:none;color:#042033;padding:8px 12px;border-radius:10px;font-weight:600;cursor:pointer}
-main{display:grid;grid-template-columns:1fr 300px;gap:18px}
-.game{padding:18px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01))}
+.mode-toggle{display:flex;gap:8px}
+.btn{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:600}
+.btn.primary{background:var(--accent);color:#042033;border:none}
+main{display:grid;grid-template-columns:1fr 340px;gap:18px}
+.game{padding:18px;border-radius:10px}
 .meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.timer{font-size:32px;font-weight:700}
-.word{font-size:28px;margin:10px 0}
-input.spell{width:100%;padding:12px;font-size:18px;border-radius:8px;border:2px solid rgba(255,255,255,0.03);background:transparent;color:inherit}
-.results{padding:18px;border-radius:10px;background:rgba(255,255,255,0.02)}
-.stat{display:flex;justify-content:space-between;margin:8px 0}
-footer{margin-top:14px;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px}
+.timer{font-size:36px;font-weight:700}
+.word-card{background:rgba(255,255,255,0.02);padding:16px;border-radius:10px;display:flex;flex-direction:column;gap:8px}
+.word-display{font-size:28px;font-weight:700}
+.hint{color:var(--muted);font-size:13px}
+input.spell{width:100%;padding:14px;font-size:18px;border-radius:10px;border:2px solid rgba(255,255,255,0.03);background:transparent;color:inherit}
+.controls{display:flex;gap:8px;margin-top:12px}
 .small{font-size:13px;color:var(--muted)}
-.past-list{max-height:220px;overflow:auto;margin-top:8px}
-.word-ok{color:#4ade80}
-.word-bad{color:#fb7185}
-@media (max-width:860px){main{grid-template-columns:1fr;}.controls{flex-wrap:wrap}}
+.results{padding:16px;border-radius:10px;background:rgba(255,255,255,0.02)}
+.stat{display:flex;justify-content:space-between;margin:10px 0}
+.past-list{max-height:260px;overflow:auto;margin-top:8px}
+.word-ok{color:var(--success)}
+.word-bad{color:var(--danger)}
+.tag{font-size:12px;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02);display:inline-block}
+footer{margin-top:14px;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px}
+@media (max-width:980px){main{grid-template-columns:1fr;}.meta{flex-direction:row;gap:8px}}
 </style>
 </head>
 <body>
-<div class="container">
+<div class="wrap">
+<div class="card">
 <header>
-<h1>Spelling Checker - Creator ASIF SAIMUN</h1>
-<div class="controls">
+<h1>Spelling Sprint & Practice</h1>
+<div style="display:flex;gap:10px;align-items:center">
+<div class="mode-toggle">
+<button class="btn" id="modePractice">Practice</button>
+<button class="btn primary" id="modeSprint">Sprint</button>
+</div>
+<div style="display:flex;gap:8px;align-items:center">
 <label class="small">Duration
-<select id="durationSelect">
+<select id="durationSelect" style="margin-left:6px;background:transparent;border:none;color:var(--muted)">
 <option value="30">30s</option>
 <option value="45">45s</option>
 <option value="60" selected>60s</option>
 <option value="90">90s</option>
 </select>
 </label>
-<label class="small">Difficulty
-<select id="difficulty">
-<option value="easy">Easy</option>
-<option value="medium" selected>Medium</option>
-<option value="hard">Hard</option>
-</select>
-</label>
-<button id="startBtn">Start</button>
+</div>
 </div>
 </header>
 
 <main>
 <section class="game">
 <div class="meta">
+<div id="metaLeft">
+<div class="small">Mode: <span id="modeLabel">Sprint</span></div>
+</div>
+<div>
 <div class="timer" id="timer">60</div>
 <div class="small">Correct: <span id="correctCount">0</span> &nbsp; | &nbsp; Attempts: <span id="attempts">0</span></div>
 </div>
-
-<div>
-<div class="word" id="wordDisplay">Press Start to play</div>
-<input id="spellingInput" class="spell" placeholder="Type the word here and press Enter" autocomplete="off" disabled />
 </div>
 
-<div style="margin-top:12px;display:flex;gap:8px;align-items:center">
-<button id="skipBtn" disabled>Skip</button>
-<button id="pauseBtn" disabled>Pause</button>
-<button id="resetBtn">Reset</button>
+<div class="word-card">
+<div class="word-display" id="wordDisplay">Press <strong>Start</strong> to begin</div>
+<div class="hint" id="hintArea">Sprint (time-based) and Practice (no timer). In Practice mode, you'll see a wrong spelling and must type the correct one.</div>
+<input id="spellingInput" class="spell" placeholder="Type your answer here and press Enter" autocomplete="off" disabled />
+
+<div class="controls">
+<button class="btn primary" id="startBtn">Start</button>
+<button class="btn" id="skipBtn" disabled>Skip</button>
+<button class="btn" id="pauseBtn" disabled>Pause</button>
+<button class="btn" id="resetBtn">Reset</button>
 </div>
 
-<div class="small" style="margin-top:14px">Tip: press Enter to submit. Skip gives the next word (counts as attempt).</div>
+<div class="small" style="margin-top:8px">Tip: Press Enter to submit. In Practice mode you must write the <strong>correct</strong> spelling of the shown wrong word.</div>
+</div>
 
 </section>
 
 <aside class="results">
 <div style="display:flex;justify-content:space-between;align-items:center">
-<strong>Session results</strong>
+<strong>Session</strong>
 <div class="small">High score: <span id="highScore">0</span></div>
 </div>
 
@@ -86,22 +99,23 @@ footer{margin-top:14px;display:flex;justify-content:space-between;align-items:ce
 <div class="stat"><div class="small">Wrong</div><div id="resWrong">0</div></div>
 <div class="stat"><div class="small">Accuracy</div><div id="resAcc">0%</div></div>
 
-<div style="margin-top:12px"><strong>Recent words</strong>
+<div style="margin-top:12px"><strong>Recent</strong>
 <div class="past-list" id="pastList"></div>
 </div>
 
-<div style="margin-top:12px" class="small">Words are simple built-in list — you can edit words in the code or connect to an API.</div>
+<div style="margin-top:12px" class="small">Words are editable inside the code. To add more words, edit the WORDS object. You can later connect to an API or Google Sheet.</div>
 </aside>
 </main>
 
 <footer>
-<div class="small">Save this file as <code>index.html</code> and publish on GitHub Pages (gh-pages branch or /docs folder).</div>
-<div class="small">Co-Founder : FARDIN EHSAN SIFAT</div>
+<div class="small">Save as <code>index.html</code> — GitHub Pages ready.</div>
+<div class="small">Made for quick spelling practice • Practice mode shows wrong spellings that you must correct.</div>
 </footer>
+</div>
 </div>
 
 <script>
-// Simple word lists by difficulty
+// Word lists
 const WORDS = {
 easy: ['apple','banana','table','chair','water','house','school','friend','window','yellow','green','family','mother','father','sugar','music','happy','light','phone','river'],
 medium: ['receive','believe','separate','calendar','restaurant','accompany','available','opportunity','questionnaire','schedule','definitely','noticeable','existence','business','language','tomorrow','neighborhood','important','experience','favorite'],
@@ -109,12 +123,16 @@ hard: ['accommodation','conscientious','miscellaneous','ophthalmology','pronunci
 };
 
 // state
+let mode = 'sprint'; // 'sprint' or 'practice'
 let duration = 60; let timeLeft = 60; let timerInterval = null;
 let correct = 0; let attempts = 0; let highScore = Number(localStorage.getItem('spelling_high')||0);
-let currentWord = '';
+let currentWord = ''; let presented = ''; // presented can be wrong variant or word depending on mode
 let playing = false; let paused = false;
 
 // elements
+const modePractice = document.getElementById('modePractice');
+const modeSprint = document.getElementById('modeSprint');
+const modeLabel = document.getElementById('modeLabel');
 const durationSelect = document.getElementById('durationSelect');
 const startBtn = document.getElementById('startBtn');
 const wordDisplay = document.getElementById('wordDisplay');
@@ -127,19 +145,61 @@ const resWrong = document.getElementById('resWrong');
 const resAcc = document.getElementById('resAcc');
 const pastList = document.getElementById('pastList');
 const highScoreEl = document.getElementById('highScore');
-const difficulty = document.getElementById('difficulty');
 const skipBtn = document.getElementById('skipBtn');
 const pauseBtn = document.getElementById('pauseBtn');
 const resetBtn = document.getElementById('resetBtn');
+const hintArea = document.getElementById('hintArea');
 
 highScoreEl.textContent = highScore;
 
-function pickWord(){
-const d = difficulty.value;
-const arr = WORDS[d];
-currentWord = arr[Math.floor(Math.random()*arr.length)];
-wordDisplay.textContent = currentWord;
+// helper: pick random word by difficulty (we'll use medium by default)
+function pickBaseWord(){
+const pool = [...WORDS.easy, ...WORDS.medium, ...WORDS.hard];
+return pool[Math.floor(Math.random()*pool.length)];
+}
+
+// helper: create a plausible wrong variant from a correct word
+function makeWrongVariant(word){
+// simple rules: swap two adjacent chars, remove a char, duplicate a char, common transposition, add common wrong suffix
+if(word.length<=3) return word + 'o';
+const rnd = Math.random();
+const chars = word.split('');
+if(rnd < 0.22){ // swap adjacent
+const i = Math.floor(Math.random()*(chars.length-1));
+const tmp = chars[i]; chars[i]=chars[i+1]; chars[i+1]=tmp;
+return chars.join('');
+}
+if(rnd < 0.44){ // remove char
+const i = Math.floor(Math.random()*chars.length);
+chars.splice(i,1); return chars.join('');
+}
+if(rnd < 0.66){ // duplicate a char
+const i = Math.floor(Math.random()*chars.length);
+chars.splice(i,0,chars[i]); return chars.join('');
+}
+if(rnd < 0.88){ // common wrong: i/e swap
+return word.replace(/ie/i, 'ei').replace(/ei/i,'ie');
+}
+// else add a letter
+const letters = 'aeiou';
+const i = Math.floor(Math.random()*chars.length);
+chars.splice(i,0,letters[Math.floor(Math.random()*letters.length)]);
+return chars.join('');
+}
+
+function presentNext(){
+currentWord = pickBaseWord();
+if(mode === 'practice'){
+presented = makeWrongVariant(currentWord);
+wordDisplay.innerHTML = `<span style="opacity:0.9">Wrong: </span> <strong>${presented}</strong>`;
+hintArea.textContent = 'Type the CORRECT spelling of the shown (wrong) word and press Enter.';
+} else {
+presented = currentWord;
+wordDisplay.textContent = presented;
+hintArea.textContent = 'Sprint: Type each word correctly as fast as you can.';
+}
 spellingInput.value = '';
+spellingInput.disabled = false;
 spellingInput.focus();
 }
 
@@ -152,59 +212,83 @@ correctCount.textContent = correct; attemptsEl.textContent = attempts;
 resCorrect.textContent = correct; resWrong.textContent = 0; resAcc.textContent = '0%'; pastList.innerHTML = '';
 spellingInput.disabled = false; skipBtn.disabled = false; pauseBtn.disabled = false;
 startBtn.textContent = 'Restart';
-pickWord();
+metaUpdate();
 clearInterval(timerInterval);
+if(mode === 'sprint'){
 timerInterval = setInterval(() => {
 if(!paused){
-timeLeft--;
-timerEl.textContent = timeLeft;
-if(timeLeft<=0){ endSession(); }
+timeLeft--; timerEl.textContent = timeLeft;
+if(timeLeft<=0) endSession();
 }
 },1000);
+} else {
+timerEl.textContent = '—';
+}
+presentNext();
 }
 
 function endSession(){
 clearInterval(timerInterval);
 playing = false; paused = false;
 spellingInput.disabled = true; skipBtn.disabled = true; pauseBtn.disabled = true; pauseBtn.textContent = 'Pause';
-// update high score
 if(correct > highScore){ highScore = correct; localStorage.setItem('spelling_high', String(highScore)); highScoreEl.textContent = highScore; }
-wordDisplay.textContent = 'Session finished — well done!';
+wordDisplay.textContent = 'Session finished — good job!';
 }
 
 function submitGuess(){
-if(!playing || paused) return;
+if(!playing) return;
 const guess = spellingInput.value.trim();
 if(guess.length===0) return;
 attempts++;
-let li = document.createElement('div');
-li.textContent = currentWord + ' → your: ' + guess;
+const el = document.createElement('div');
+if(mode === 'practice'){
+// presented is wrong variant; currentWord is correct
 if(guess.toLowerCase() === currentWord.toLowerCase()){
-correct++;
-li.className = 'word-ok';
+correct++; el.innerHTML = `Correct — <strong>${currentWord}</strong>`; el.className='word-ok';
 } else {
-li.className = 'word-bad';
+el.innerHTML = `Wrong — you wrote: <strong>${guess}</strong>. Correct: <strong>${currentWord}</strong>`; el.className='word-bad';
 }
-pastList.prepend(li);
+pastList.prepend(el);
+updateStats();
+// after attempt, show the correct spelling if user wrong (we already did) and move on
+presentNext();
+} else {
+// sprint mode: presented is the correct word
+if(guess.toLowerCase() === presented.toLowerCase()){
+correct++; el.textContent = presented + ' → correct'; el.className='word-ok';
+} else {
+el.textContent = presented + ' → your: ' + guess; el.className='word-bad';
+}
+pastList.prepend(el);
+updateStats();
+presentNext();
+}
+}
+
+function updateStats(){
 correctCount.textContent = correct; attemptsEl.textContent = attempts;
-resCorrect.textContent = correct;
-resWrong.textContent = attempts - correct;
+resCorrect.textContent = correct; resWrong.textContent = attempts - correct;
 resAcc.textContent = attempts===0? '0%': Math.round((correct/attempts)*100) + '%';
-pickWord();
 }
 
 // events
+modePractice.addEventListener('click', ()=>{ mode='practice'; modeLabel.textContent='Practice'; modePractice.classList.add('primary'); modeSprint.classList.remove('primary'); if(!playing) timerEl.textContent='—'; });
+modeSprint.addEventListener('click', ()=>{ mode='sprint'; modeLabel.textContent='Sprint'; modeSprint.classList.add('primary'); modePractice.classList.remove('primary'); if(!playing) timerEl.textContent=durationSelect.value; });
+
 startBtn.addEventListener('click', ()=>{ startSession(); });
 spellingInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') submitGuess(); });
-skipBtn.addEventListener('click', ()=>{ if(!playing) return; attempts++; pastList.prepend((() => {let el=document.createElement('div'); el.textContent = currentWord + ' → skipped'; el.className='word-bad'; return el;})()); attemptsEl.textContent = attempts; resWrong.textContent = attempts-correct; resAcc.textContent = attempts===0? '0%': Math.round((correct/attempts)*100) + '%'; pickWord(); });
+skipBtn.addEventListener('click', ()=>{ if(!playing) return; attempts++; const el=document.createElement('div'); el.textContent = (mode==='practice'? presented + ' → skipped (correct: ' + currentWord + ')' : presented + ' → skipped'); el.className='word-bad'; pastList.prepend(el); updateStats(); presentNext(); });
 pauseBtn.addEventListener('click', ()=>{ if(!playing) return; paused = !paused; pauseBtn.textContent = paused? 'Resume' : 'Pause'; spellingInput.disabled = paused; });
-resetBtn.addEventListener('click', ()=>{ clearInterval(timerInterval); playing=false; paused=false; timeLeft = Number(durationSelect.value); timerEl.textContent = timeLeft; wordDisplay.textContent = 'Press Start to play'; spellingInput.value=''; spellingInput.disabled=true; skipBtn.disabled=true; pauseBtn.disabled=true; startBtn.textContent='Start'; correct=0; attempts=0; correctCount.textContent=0; attemptsEl.textContent=0; resCorrect.textContent=0; resWrong.textContent=0; resAcc.textContent='0%'; });
+resetBtn.addEventListener('click', ()=>{ clearInterval(timerInterval); playing=false; paused=false; timeLeft = Number(durationSelect.value); timerEl.textContent = (mode==='sprint'? timeLeft : '—'); wordDisplay.textContent = 'Press Start to play'; spellingInput.value=''; spellingInput.disabled=true; skipBtn.disabled=true; pauseBtn.disabled=true; startBtn.textContent='Start'; correct=0; attempts=0; updateStats(); pastList.innerHTML=''; });
 
-// initialize
-timerEl.textContent = durationSelect.value;
-spellingInput.disabled = true; skipBtn.disabled = true; pauseBtn.disabled = true;
+// helpers
+function metaUpdate(){ document.getElementById('metaLeft').querySelector('.small')?.remove?.(); }
 
-// allow user to edit words via console: window.WORDS
+// init
+timerEl.textContent = durationSelect.value; spellingInput.disabled = true; skipBtn.disabled = true; pauseBtn.disabled = true;
+
+// expose WORDS for quick editing in console
+window.WORDS = WORDS;
 </script>
 </body>
 </html>
