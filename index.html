@@ -3,406 +3,382 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spelling Checker - Beta 2.1</title>
+<title>Spell Master V1 - Practice & Chat</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-/* --- General Reset & Layout --- */
+/* --- General Reset & Professional Layout --- */
 body {
-font-family: 'Arial', sans-serif;
-display: flex;
-flex-direction: column;
-align-items: center;
-padding: 20px;
-min-height: 100vh;
-background-color: #f4f4f9; /* Light mode default */
+font-family: 'Roboto', sans-serif;
+margin: 0;
+padding: 0;
+background-color: #f0f2f5;
 color: #333;
-transition: background-color 0.3s, color 0.3s;
+line-height: 1.6;
 }
 
-h1 {
-color: #007bff;
-margin-bottom: 5px;
+.container-app {
+width: 95%;
+max-width: 1400px; /* Wider container to accommodate chat */
+margin: 0 auto;
 }
 
-/* --- Dark Mode CSS --- */
-.dark-mode {
-background-color: #1e1e1e;
-color: #f0f0f0;
-}
-
-.dark-mode h1 {
-color: #90b8ff;
-}
-
-.dark-mode button, .dark-mode input {
-background-color: #333;
-color: #f0f0f0;
-border: 1px solid #555;
-}
-
-.dark-mode .stats-box {
-background-color: #2a2a2a;
-border: 1px solid #444;
-}
-
-/* --- Container & Components --- */
-.container {
-width: 100%;
-max-width: 600px;
+.card {
 background: #fff;
 padding: 25px;
 border-radius: 8px;
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
-.stats-box {
-background: #eef;
-padding: 15px;
-border-radius: 6px;
-margin-bottom: 20px;
-text-align: center;
+/* --- Header and Navigation --- */
+.main-header {
+background-color: #ffffff;
+border-bottom: 3px solid #007bff;
+padding: 15px 0;
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
-#word-context-sentence {
-font-size: 1.5em;
-margin: 20px 0;
-padding: 10px;
-min-height: 50px; /* Prevent layout shift */
-}
-
-#word-context-sentence u {
-font-weight: bold;
-color: #dc3545; /* Highlight the misspelled word in red */
-}
-
-/* --- Input & Buttons --- */
-#user-input {
-width: calc(100% - 20px);
-padding: 10px;
-margin-bottom: 15px;
-font-size: 1.2em;
-border: 2px solid #ccc;
-border-radius: 4px;
-}
-
-.controls {
+.header-content {
 display: flex;
-gap: 10px;
-justify-content: center;
-margin-bottom: 20px;
+justify-content: space-between;
+align-items: center;
 }
 
-button {
-padding: 10px 15px;
-font-size: 1em;
-cursor: pointer;
-border: none;
-border-radius: 4px;
+.logo-text {
+font-size: 1.8em;
+color: #007bff;
+font-weight: 900;
+}
+
+.main-nav {
+display: flex;
+gap: 30px;
+}
+
+.nav-item {
+text-decoration: none;
+color: #555;
+font-weight: 500;
+padding: 5px 0;
+position: relative;
+transition: color 0.2s;
+}
+
+.nav-item.active {
+color: #007bff;
+}
+
+.nav-item.active::after {
+content: '';
+position: absolute;
+bottom: -15px;
+left: 0;
+width: 100%;
+height: 3px;
 background-color: #007bff;
-color: white;
+}
+
+.user-profile span {
+margin-right: 10px;
+font-weight: 700;
+}
+
+.btn-primary, .btn-secondary {
+padding: 10px 20px;
+border: none;
+border-radius: 6px;
+cursor: pointer;
+font-size: 1em;
+font-weight: 700;
 transition: background-color 0.2s;
 }
 
-button:hover {
-background-color: #0056b3;
+.btn-primary {
+background-color: #007bff;
+color: white;
 }
 
-/* Mode and Duration Selectors */
-.mode-selector, .duration-selector {
+.btn-secondary {
+background-color: #6c757d;
+color: white;
+}
+
+/* --- Main Layout Grid --- */
+.app-layout {
+display: grid;
+grid-template-columns: 2.5fr 1fr; /* Practice area is wider than chat */
+gap: 30px;
+padding: 40px 0;
+}
+
+/* --- Content Sections (Left Column) --- */
+.content-section {
+display: none;
+padding-top: 20px;
+}
+
+.content-section.active {
+display: block;
+}
+
+.stats-bar {
 display: flex;
-gap: 10px;
-margin-bottom: 15px;
+justify-content: space-between;
+margin-bottom: 25px;
+background-color: #e9f2ff;
+padding: 15px 25px;
+font-weight: 500;
+}
+
+.practice-area {
+text-align: center;
+padding: 50px 30px;
+}
+
+.word-context-display {
+font-size: 1.8em;
+min-height: 40px;
+margin-bottom: 30px;
+}
+
+.word-context-display u {
+color: #dc3545;
+font-weight: 700;
+}
+
+.main-input {
+width: 80%;
+padding: 15px;
+font-size: 1.3em;
+border: 2px solid #007bff;
+border-radius: 6px;
+text-align: center;
+margin-bottom: 20px;
+}
+
+.action-buttons {
+display: flex;
+gap: 15px;
 justify-content: center;
 }
-.mode-selector button, .duration-selector button {
-background-color: #6c757d;
-}
-.mode-selector button.active, .duration-selector button.active {
-background-color: #28a745; /* Green for active state */
+
+/* --- World Chat UI (Right Column) --- */
+.chat-container {
+height: calc(100vh - 150px); /* Fill remaining viewport height */
+display: flex;
+flex-direction: column;
+padding: 0;
+box-sizing: border-box;
 }
 
+.chat-header {
+background-color: #007bff;
+color: white;
+padding: 15px;
+border-top-left-radius: 8px;
+border-top-right-radius: 8px;
+font-size: 1.2em;
+font-weight: 700;
+}
+
+#chat-messages {
+flex-grow: 1;
+padding: 15px;
+overflow-y: auto;
+background-color: #f8f9fa; /* Light background for message area */
+border-left: 1px solid #eee;
+border-right: 1px solid #eee;
+}
+
+.message {
+margin-bottom: 10px;
+}
+
+.message strong {
+color: #007bff;
+margin-right: 5px;
+}
+
+.message.self strong {
+color: #28a745; /* Green for own messages */
+}
+
+.chat-input-area {
+display: flex;
+padding: 10px;
+border-top: 1px solid #eee;
+background-color: white;
+border-bottom-left-radius: 8px;
+border-bottom-right-radius: 8px;
+}
+
+#chat-input {
+flex-grow: 1;
+padding: 10px;
+border: 1px solid #ccc;
+border-radius: 4px;
+margin-right: 10px;
+}
+
+#send-btn {
+background-color: #28a745;
+color: white;
+padding: 10px 15px;
+}
+
+/* --- Hide Login/Setup content in this file --- */
+/* Assuming this is practice.html, we don't need the login UI */
 </style>
 </head>
 <body>
+<header class="main-header">
+<div class="header-content container-app">
+<div class="logo-text">Spell Master</div>
+<nav class="main-nav">
+<a href="#" class="nav-item active" data-section="practice">Practice</a>
+<a href="#" class="nav-item" data-section="sprint">Sprint</a>
+<a href="#" class="nav-item" data-section="ielts">IELTS Writing</a>
+</nav>
+<div class="user-profile">
+<span id="user-display-name">Guest User</span>
+<button id="logout-btn" class="btn-secondary">Logout</button>
+</div>
+</div>
+</header>
 
-<div class="container">
-<h1>Spelling Checker</h1>
-<p>Creator Asif Saimun | Beta version 2.1</p>
+<main class="app-main container-app">
+<div class="app-layout">
+<div class="practice-column">
 
-<div class="mode-selector">
-<button id="mode-practice" class="active">Practice</button>
-<button id="mode-sprint">Sprint</button>
+<section id="practice-section" class="content-section active">
+<h2>📚 Core Spelling Practice</h2>
+<div class="stats-bar card">
+<span>Mode: Practice</span>
+<span>Difficulty: Medium</span>
+<span>Words Mastered: <span id="mastered-count">42</span></span>
 </div>
 
-<div class="duration-selector" id="sprint-duration-selector" style="display: none;">
-<button data-duration="30">30s</button>
-<button data-duration="45" class="active">45s</button>
-<button data-duration="60">60s</button>
-<button data-duration="90">90s</button>
+<div class="practice-area card">
+<p class="word-context-display">
+The $\text{\underline{prinsipal}}$ reason for the delay was traffic.
+</p>
+<input type="text" id="practice-input" placeholder="Type the correct word here..." class="main-input">
+<div class="action-buttons">
+<button class="btn-primary">Submit (Enter)</button>
+<button class="btn-secondary">Skip</button>
+</div>
+</div>
+</section>
+
+<section id="sprint-section" class="content-section">
+<h2>⏱️ Spelling Sprint Challenge</h2>
+<div class="stats-bar card">
+<span>Time: <span id="sprint-timer">60s</span></span>
+<span>Correct: <span id="sprint-correct">0</span></span>
+<span>High Score: <span id="sprint-high-score">25</span></span>
+</div>
+<div class="card" style="padding: 50px;">
+<p>Challenge your speed and accuracy in a timed session!</p>
+<button class="btn-primary" style="margin-top: 15px;">Start Sprint</button>
+</div>
+</section>
+
+<section id="ielts-section" class="content-section">
+<h2>📝 IELTS Writing Vocabulary</h2>
+<div class="card" style="padding: 50px;">
+<h3>Task: Academic Vocabulary Drill</h3>
+<p>Focus on high-frequency, high-value words for IELTS Task 2 essays.</p>
+<button class="btn-primary" style="margin-top: 15px;">Start IELTS Drill</button>
+</div>
+</section>
 </div>
 
-<div class="stats-box">
-<p>Mode: <span id="current-mode-display">Practice</span></p>
-<p>Time Left: <span id="timer-display">--</span> | Correct: <span id="correct-count">0</span> | Attempts: <span id="attempt-count">0</span></p>
+<div class="chat-column">
+<div class="chat-container card">
+<div class="chat-header">
+🌍 World Chat (Spelling Talk)
 </div>
-
-<div style="text-align: center;">
-<p id="word-context-sentence">Press **Start** to begin.</p>
+<div id="chat-messages">
+<div class="message"><strong>GuestUser321:</strong> This is a great exercise!</div>
+<div class="message self"><strong>Me:</strong> Thanks! I just scored 15 in the sprint.</div>
+<div class="message"><strong>ProSpeller:</strong> Don't forget the difference between 'principal' and 'principle'!</div>
 </div>
-
-<input type="text" id="user-input" placeholder="Type the correct word here..." disabled>
-
-<div class="controls">
-<button id="start-btn">Start</button>
-<button id="skip-btn" disabled>Skip</button>
-<button id="pause-btn" disabled>Pause</button>
-<button id="reset-btn">Reset</button>
+<div class="chat-input-area">
+<input type="text" id="chat-input" placeholder="Type your message here..." required>
+<button id="send-btn">Send</button>
 </div>
-
-<hr>
-
-<div class="stats-box">
-<h3>Progress Tracker</h3>
-<p>High Score (Sprint): <span id="global-high-score">0</span></p>
-<p>Session Accuracy: <span id="accuracy-display">0%</span></p>
 </div>
-
-<button id="theme-toggle" style="margin-top: 20px;">Toggle Dark Mode 🌙</button>
-
 </div>
+</div>
+</main>
 
 <script>
-// --- Word Data (Sample for Contextual Practice) ---
-const contextualWords = [
-{ misspelled: "prinsipal", correct: "principal", context: "The $\text{\underline{prinsipal}}$ reason for the delay was traffic." },
-{ misspelled: "seperate", correct: "separate", context: "Please try to $\text{\underline{seperate}}$ the trash from the recycling." },
-{ misspelled: "definitly", correct: "definitely", context: "I $\text{\underline{definitly}}$ want to go to the party tonight." },
-{ misspelled: "acknowlege", correct: "acknowledge", context: "You should $\text{\underline{acknowlege}}$ their effort." },
-{ misspelled: "recieve", correct: "receive", context: "Did you $\text{\underline{recieve}}$ the package I sent?" },
-{ misspelled: "occassion", correct: "occasion", context: "It was a very special $\text{\underline{occassion}}$." },
-];
+// --- UI and Chat Logic ---
+document.addEventListener('DOMContentLoaded', () => {
+const navItems = document.querySelectorAll('.nav-item');
+const sections = document.querySelectorAll('.content-section');
+const chatInput = document.getElementById('chat-input');
+const sendBtn = document.getElementById('send-btn');
+const chatMessages = document.getElementById('chat-messages');
+const userName = document.getElementById('user-display-name').textContent; // Get the user's name
 
-// --- DOM Elements ---
-const body = document.body;
-const themeToggle = document.getElementById('theme-toggle');
-const startBtn = document.getElementById('start-btn');
-const skipBtn = document.getElementById('skip-btn');
-const userInput = document.getElementById('user-input');
-const wordDisplay = document.getElementById('word-context-sentence');
-const correctCountDisplay = document.getElementById('correct-count');
-const attemptCountDisplay = document.getElementById('attempt-count');
-const accuracyDisplay = document.getElementById('accuracy-display');
-const globalHighScoreDisplay = document.getElementById('global-high-score');
-const timerDisplay = document.getElementById('timer-display');
-const modeDisplay = document.getElementById('current-mode-display');
-const durationSelector = document.getElementById('sprint-duration-selector');
+// 1. Navigation Logic
+navItems.forEach(item => {
+item.addEventListener('click', (e) => {
+e.preventDefault();
+document.querySelector('.nav-item.active').classList.remove('active');
+item.classList.add('active');
 
-// --- State Variables ---
-let currentWord = null;
-let isRunning = false;
-let isSprintMode = false;
-let score = 0;
-let attempts = 0;
-let correctAnswers = 0;
-let timer = 0;
-let countdownInterval = null;
-let sprintDuration = 45; // Default duration
-
-// --- Initialization ---
-let globalHighScore = localStorage.getItem('spellcheckerHighScore') || 0;
-globalHighScoreDisplay.textContent = globalHighScore;
-
-// 1. Dark Mode Setup
-function setupDarkMode() {
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme === 'dark') {
-body.classList.add('dark-mode');
-themeToggle.textContent = 'Toggle Light Mode ☀️';
+const targetId = item.getAttribute('data-section') + '-section';
+sections.forEach(section => {
+section.classList.remove('active');
+if (section.id === targetId) {
+section.classList.add('active');
 }
-themeToggle.addEventListener('click', () => {
-body.classList.toggle('dark-mode');
-const isDarkMode = body.classList.contains('dark-mode');
-themeToggle.textContent = isDarkMode ? 'Toggle Light Mode ☀️' : 'Toggle Dark Mode 🌙';
-localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
 });
-}
-setupDarkMode();
-
-// 2. Mode and Duration Handlers
-document.querySelectorAll('.mode-selector button').forEach(button => {
-button.addEventListener('click', (e) => {
-document.querySelector('.mode-selector button.active').classList.remove('active');
-e.target.classList.add('active');
-
-isSprintMode = (e.target.id === 'mode-sprint');
-modeDisplay.textContent = isSprintMode ? 'Sprint' : 'Practice';
-durationSelector.style.display = isSprintMode ? 'flex' : 'none';
-resetGame();
 });
 });
 
-durationSelector.querySelectorAll('button').forEach(button => {
-button.addEventListener('click', (e) => {
-durationSelector.querySelector('button.active').classList.remove('active');
-e.target.classList.add('active');
-sprintDuration = parseInt(e.target.dataset.duration);
-resetGame();
-});
-});
+// 2. Chat Logic (Simulated)
+function sendMessage() {
+const messageText = chatInput.value.trim();
+if (messageText === "") return;
 
+// Create a new message element
+const newMessage = document.createElement('div');
+newMessage.classList.add('message', 'self'); // 'self' class for styling
+newMessage.innerHTML = `<strong>${userName}:</strong> ${messageText}`;
 
-// --- Core Game Functions ---
+chatMessages.appendChild(newMessage);
+chatInput.value = '';
 
-function loadNextWord() {
-// Get a random word object
-const wordData = contextualWords[Math.floor(Math.random() * contextualWords.length)];
-currentWord = wordData.correct.toLowerCase();
+// Scroll to the bottom of the chat window
+chatMessages.scrollTop = chatMessages.scrollHeight;
 
-// Display the sentence, highlighting the misspelled word
-const highlightedContext = wordData.context.replace(
-wordData.misspelled,
-`<u>${wordData.misspelled}</u>`
-);
-wordDisplay.innerHTML = highlightedContext;
-
-userInput.value = '';
-userInput.focus();
+// NOTE: In a real application, you would send this message
+// to a server via WebSocket (e.g., using Node.js, Firebase, or Pusher).
 }
 
-function checkInput() {
-if (!isRunning) return;
-
-const submission = userInput.value.trim().toLowerCase();
-
-if (submission === currentWord) {
-correctAnswers++;
-attempts++;
-score = correctAnswers; // Score is just correct answers in sprint mode
-updateStats();
-loadNextWord();
-// Optional: Provide visual feedback for correct answer
-} else if (submission.length > 0) {
-attempts++;
-updateStats();
-// Optional: Provide visual feedback for wrong answer (e.g., shake the input box)
-}
-
-// In Practice mode, only update if the word is correct
-if (!isSprintMode && submission === currentWord) {
-loadNextWord();
-} else if (!isSprintMode) {
-// In Practice mode, user must submit the correct word to proceed.
-}
-}
-
-function updateStats() {
-correctCountDisplay.textContent = correctAnswers;
-attemptCountDisplay.textContent = attempts;
-
-let accuracy = attempts > 0 ? ((correctAnswers / attempts) * 100).toFixed(0) : 0;
-accuracyDisplay.textContent = `${accuracy}%`;
-
-// Update Global High Score (only if in Sprint mode)
-if (isSprintMode && score > globalHighScore) {
-globalHighScore = score;
-localStorage.setItem('spellcheckerHighScore', globalHighScore);
-globalHighScoreDisplay.textContent = globalHighScore;
-}
-}
-
-function startGame() {
-if (isRunning) return;
-
-isRunning = true;
-score = 0;
-correctAnswers = 0;
-attempts = 0;
-
-startBtn.textContent = 'Stop';
-userInput.disabled = false;
-skipBtn.disabled = false;
-pauseBtn.disabled = false;
-
-updateStats();
-loadNextWord();
-
-if (isSprintMode) {
-timer = sprintDuration;
-timerDisplay.textContent = timer;
-countdownInterval = setInterval(() => {
-timer--;
-timerDisplay.textContent = timer;
-if (timer <= 0) {
-endGame();
-}
-}, 1000);
-} else {
-timerDisplay.textContent = '∞';
-}
-}
-
-function endGame() {
-isRunning = false;
-clearInterval(countdownInterval);
-userInput.disabled = true;
-skipBtn.disabled = true;
-pauseBtn.disabled = true;
-startBtn.textContent = 'Start';
-timerDisplay.textContent = '--';
-
-if (isSprintMode) {
-wordDisplay.innerHTML = `**Time's up!** Your final score: **${score}** correct words.`;
-} else {
-wordDisplay.innerHTML = `**Session Stopped.** Press Start to continue.`;
-}
-
-// Re-update to ensure high score is saved
-updateStats();
-}
-
-function resetGame() {
-endGame();
-correctAnswers = 0;
-attempts = 0;
-score = 0;
-userInput.value = '';
-updateStats();
-wordDisplay.innerHTML = isSprintMode ?
-`**Sprint Mode** (${sprintDuration}s). Press Start to begin.` :
-`**Practice Mode**. Press Start to begin.`;
-timerDisplay.textContent = isSprintMode ? sprintDuration : '--';
-}
-
-
-// --- Event Listeners ---
-startBtn.addEventListener('click', () => {
-if (isRunning) {
-endGame();
-} else {
-startGame();
-}
-});
-
-skipBtn.addEventListener('click', () => {
-if (isRunning) {
-attempts++; // Count skipped as an attempt (optional logic)
-updateStats();
-loadNextWord();
-}
-});
-
-// Use Enter key to submit
-userInput.addEventListener('keypress', (e) => {
+sendBtn.addEventListener('click', sendMessage);
+chatInput.addEventListener('keypress', (e) => {
 if (e.key === 'Enter') {
-checkInput();
-e.preventDefault(); // Prevent form submission if in a form
+sendMessage();
 }
 });
 
-document.getElementById('reset-btn').addEventListener('click', resetGame);
+// 3. Simple User Setup (For the combined file)
+// If you launch this single file, you can set a default name.
+document.getElementById('user-display-name').textContent =
+localStorage.getItem('userName') || 'Guest Player';
 
-// Initial setup on load
-resetGame();
+document.getElementById('logout-btn').addEventListener('click', () => {
+alert('Logging out is simulated. You would be redirected to the login page now.');
+localStorage.removeItem('userName');
+window.location.reload();
+});
 
+// Initial scroll to bottom of chat
+chatMessages.scrollTop = chatMessages.scrollHeight;
+});
 </script>
 </body>
 </html>
